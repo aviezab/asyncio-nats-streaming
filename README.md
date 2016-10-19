@@ -12,3 +12,4 @@ A client implementation of NATS Streaming Protocol utilizing Asyncio for fast as
 - [] Custom timeouts for pub/sub
 - [] Refactor for cleanliness
 - [] Create JSON Publisher/Subscriber for quick serialization/deserialization of JSON data.
+- [] Switch to logger instead of printing
