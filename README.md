@@ -4,7 +4,7 @@
 ### Description
 A client implementation of NATS Streaming Protocol utilizing Asyncio for fast asyncronoush pub/sub.
 
-### TODO:
+#### TODO:
 
 - [] Write some tests
 - [] Write better README
