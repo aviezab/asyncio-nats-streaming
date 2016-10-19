@@ -82,6 +82,9 @@ class StreamClient:
                 io_loop=None,
                 verbose=False,
                 **options):
+        """
+        Set's up the Stream client and the NATS client if needed.
+        """
         if nc:
             self.nc_owned = False
         if not self.nc.is_connected:
@@ -92,12 +95,13 @@ class StreamClient:
             )
         self.server_id = server_id
         self.client_id = client_id
-        self.heart_beat_inbox = new_inbox()
-        self.heart_beat_sub = yield from self.nc.subscribe(
-            self.heart_beat_inbox, cb=self._process_heartbeat,
-            is_async=True
-        )
+        yield from self._sub_to_heartbeat()
+        yield from self._send_connection_request()
+        yield from self._sub_to_acks()
 
+    @asyncio.coroutine
+    def _send_connection_request(self):
+        # Create connect request for streaming service
         connect_req = pb.ConnectRequest()
         connect_req.clientID = self.client_id
         connect_req.heartbeatInbox = self.heart_beat_inbox
@@ -117,11 +121,25 @@ class StreamClient:
         self.unsub_requests = connect_response.unsubRequests
         self.close_requests = connect_response.closeRequests
 
+    @asyncio.coroutine
+    def _sub_to_acks(self):
         self.ack_subject = DEFAULT_ACK_PREFIX + "." + create_guid()
         self.ack_subscription = yield from self.nc.subscribe(self.ack_subject, cb=self._process_ack, is_async=True)
 
     @asyncio.coroutine
+    def _sub_to_heartbeat(self):
+        # Setup the heartbeat inbox
+        self.heart_beat_inbox = new_inbox()
+        self.heart_beat_sub = yield from self.nc.subscribe(
+            self.heart_beat_inbox, cb=self._process_heartbeat,
+            is_async=True
+        )
+
+    @asyncio.coroutine
     def close(self):
+        """
+        Shut's down the Stream Client and possibly the NATS Client.
+        """
         if not self.nc.is_connected:
             return
 
@@ -147,6 +165,10 @@ class StreamClient:
 
     @asyncio.coroutine
     def publish(self, pub, data):
+        """
+        Sends the data on the publishers subject.
+        Sets up an Ack to call the publishers ack_cb with the message.
+        """
         pm = pb.PubMsg()
         pm.clientID = self.client_id
         pm.guid = create_guid()
@@ -338,4 +360,7 @@ class Publisher:
 
     @asyncio.coroutine
     def publish(self, data):
+        """
+        Sends the data on the subject of the producer and calls ack_cb(ack_msg)
+        """
         yield from self.sc.publish(self, data)
