@@ -1,5 +1,5 @@
 from setuptools import setup
-from nats.aio.client import __version__
+from nats_stream import __version__
 
 setup(
     name='asyncio-nats-streaming-client',

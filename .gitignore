@@ -5,3 +5,5 @@
 # Testing data and cfg stored here
 stream_server/
 *.egg-info/
+build/
+dist/
