@@ -1,13 +1,12 @@
 import asyncio
-import time
 import traceback
 
 from nats.aio import client as NATS
-from nats.aio.utils import hex_rand, new_inbox
+from nats.aio.utils import new_inbox
 
 from nats_stream import pb
+from nats_stream.utils import create_guid
 
-# Pub options
 DEFAULT_DISCOVER_PREFIX = "_STAN.discover"
 DEFAULT_ACK_PREFIX = "_STAN.acks"
 DEFAULT_CONNECT_WAIT = 2
@@ -17,19 +16,11 @@ DEFAULT_ACK_WAIT = 30  # seconds
 DEFAULT_MAX_INFLIGHT = 1024
 
 
-def create_guid():
-    return ''.join([hex_rand(0x10),
-                    hex_rand(0x10),
-                    hex_rand(0x10),
-                    hex_rand(0x10),
-                    hex_rand(0x24)])
-
-
 class Ack:
     def __init__(self, handler, pub):
         """
         :param handler: Func(msg, error)
-        :type pub Publisher
+        :type pub nats_stream.aio.publisher.Publisher
         """
         self.handler = handler
         self.pub = pub
@@ -37,6 +28,10 @@ class Ack:
 
 class Msg:
     def __init__(self, proto_msg, sub):
+        """
+        :type proto_msg: pb.Msg
+        :type sub: Subscriber
+        """
         self.sub = sub  # Subscription
         self.sequence = proto_msg.sequence
         self.subject = proto_msg.subject
@@ -274,93 +269,3 @@ class StreamClient:
             print("Error unsubscribing {}".format(unsub_resp.error))
 
 
-class Subscriber:
-    NEW_ONLY = 0
-    LAST_RECEIVED = 1
-    TIME_DELTA_START = 2
-    SEQUENCE_START = 3
-    FIRST = 4
-
-
-    def __init__(self,
-                 sc,
-                 subject,
-                 message_cb,
-                 queue_name='',
-                 durable_name='',
-                 max_inflight=DEFAULT_MAX_INFLIGHT,
-                 ack_wait=DEFAULT_ACK_WAIT,
-                 start_position=NEW_ONLY,
-                 start_sequence=None,
-                 start_time=None,
-                 manual_acks=False,
-                 ):
-        """
-        A nice little wrapper around subscribing.
-
-        :type sc StreamClient
-        :type subject basestring
-        :type message_cb callable(msg: Msg)
-        :type queue_name basestring
-        :type max_inflight int
-        :type ack_wait: int
-        :type start_position: int
-        :type start_sequence: int
-        :type start_time datetime.datetime
-        :type manual_acks bool
-        """
-
-        self.sc = sc
-        self.subject = subject
-        self.queue_name = queue_name
-        self.message_cb = message_cb
-
-        self.durable_name = durable_name
-        self.max_inflight = max_inflight
-        self.ack_wait = ack_wait
-
-        self.start_position = start_position
-        self.start_sequence = start_sequence  # sequence to start at
-        self.start_time = start_time  # datetime to start at
-        self.start_at = None
-
-        if start_time and start_sequence:
-            raise NATS.ErrBadSubscription("Cannot start at sequence and time! Pick either time or sequence.")
-        if start_time:
-            self.start_at = pb.TimeDeltaStart()
-            self.start_at = int((time.time() - self.start_time.timestamp()) / 1e-9)  # nano?
-
-        self.manual_acks = manual_acks
-
-        self.inbox = new_inbox()
-        self.inbox_sub = None
-        self.ack_inbox = None
-
-    @asyncio.coroutine
-    def subscribe(self):
-        yield from self.sc.subscribe(self)
-
-    @asyncio.coroutine
-    def unsubscribe(self):
-        yield from self.sc.unsubscribe(self)
-
-
-class Publisher:
-    def __init__(self, sc, subject, ack_cb):
-        """
-        A nice little wrapper around publishing messages.
-
-        :type sc StreamClient
-        :type subject basestring
-        :type ack_cb callable(ack)
-        """
-        self.sc = sc
-        self.subject = subject
-        self.ack_cb = ack_cb
-
-    @asyncio.coroutine
-    def publish(self, data):
-        """
-        Sends the data on the subject of the producer and calls ack_cb(ack_msg)
-        """
-        yield from self.sc.publish(self, data)

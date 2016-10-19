@@ -1,7 +1,9 @@
 import asyncio
 import traceback
 
-from nats_stream.aio.client import StreamClient, Publisher
+from nats_stream.aio.client import StreamClient
+from nats_stream.aio.publisher import Publisher
+
 
 async def run(loop):
     sc = StreamClient()

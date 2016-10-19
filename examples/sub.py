@@ -1,7 +1,9 @@
 import asyncio
 import signal
 
-from nats_stream.aio.client import StreamClient, Subscriber, Msg
+from nats_stream.aio.client import StreamClient, Msg
+from nats_stream.aio.subscriber import Subscriber
+
 
 async def message_handler(msg: Msg):
     print(msg.data.decode())
