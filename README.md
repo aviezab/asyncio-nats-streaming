@@ -4,6 +4,9 @@
 ### Description
 A client implementation of NATS Streaming Protocol utilizing Asyncio for fast asyncronoush pub/sub.
 
+### Install
+Install the client with `pip install asyncio-nats-streaming-client`
+
 #### TODO:
 
 - [] Write some tests
