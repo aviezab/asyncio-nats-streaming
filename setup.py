@@ -18,7 +18,7 @@ setup(
     author='Jared Mackey',
     author_email='jared@mackey.tech',
     license='MIT License',
-    install_requires=["asyncio-nats-client"],
+    install_requires=["asyncio-nats-client", "protobuf"],
     packages=['nats_stream', 'nats_stream.aio', 'nats_stream.pb'],
     zip_safe=True,
 )
