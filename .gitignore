@@ -1,0 +1,6 @@
+.idea/
+*.pyc
+*pycache/
+
+# Testing data and cfg stored here
+stream_server/
