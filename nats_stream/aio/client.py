@@ -1,5 +1,4 @@
 import asyncio
-import traceback
 
 from nats.aio import client as NATS
 from nats.aio.utils import new_inbox
@@ -148,14 +147,11 @@ class StreamClient:
         if close_resp.error:
             if "unknown clientID" not in close_resp.error:
                 raise NATS.NatsError(close_resp.error)
-            else:
-                print(close_resp.error)
         elif self.nc_owned:
             yield from self.nc.close()
 
     @asyncio.coroutine
     def _process_heartbeat(self, msg):
-        print("Processing HeartBeat: {msg}".format(msg=msg))
         yield from self.nc.publish(msg.reply, b'')
 
     @asyncio.coroutine
@@ -174,15 +170,10 @@ class StreamClient:
         self.pub_ack_map[pm.guid] = ack
 
         subj = self.pub_prefix + "." + pub.subject
-        try:
-            yield from self.nc.publish_request(subj, self.ack_subject, pm.SerializeToString())
-        except Exception:
-            print(traceback.format_exc())
-            raise
+        yield from self.nc.publish_request(subj, self.ack_subject, pm.SerializeToString())
 
     @asyncio.coroutine
     def _process_ack(self, msg):
-        print("Processing ACK: {msg}".format(msg=msg))
         pub_ack = pb.PubAck()
         pub_ack.ParseFromString(msg.data)
         ack = self.pub_ack_map.pop(pub_ack.guid)
@@ -242,9 +233,12 @@ class StreamClient:
         sub_resp = pb.SubscriptionResponse()
         sub_resp.ParseFromString(reply.data)
         if sub_resp.error:
-            print("Error subscribing {}".format(sub_resp.error))
-            yield from self.unsubscribe(sub)
-            return
+            try:
+                yield from self.unsubscribe(sub)
+            except NATS.NatsError:
+                # Subscription may never have completed so an error that it cannot unsub is ok
+                pass
+            raise NATS.NatsError("Error subscribing: '{}'".format(sub_resp.error))
 
         sub.ack_inbox = sub_resp.ackInbox
 
@@ -259,13 +253,8 @@ class StreamClient:
         unsub_req.inbox = sub.inbox
 
         reply = yield from self.nc.request(self.unsub_requests, unsub_req.SerializeToString())
-        if reply.error:
-            print("Error unsubscribing {}".format(reply.error))
-            return
-
         unsub_resp = pb.SubscriptionResponse()
         unsub_resp.ParseFromString(reply.data)
         if unsub_resp.error:
-            print("Error unsubscribing {}".format(unsub_resp.error))
-
-
+            raise NATS.NatsError(
+                "Error unsubscribbing  from {subject}: '{err}'".format(subject=sub.subject, err=reply.error))

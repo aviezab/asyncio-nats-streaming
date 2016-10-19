@@ -1,4 +1,5 @@
 import asyncio
+import json
 
 
 class Publisher:
@@ -20,3 +21,17 @@ class Publisher:
         Sends the data on the subject of the producer and calls ack_cb(ack_msg)
         """
         yield from self.sc.publish(self, data)
+
+
+class JSONPublisher(Publisher):
+    @asyncio.coroutine
+    def publish(self, data):
+        """
+        Serializes your data to JSON before publishing.
+        """
+        try:
+            data = bytes(json.dumps(data), encoding='UTF-8')
+        except TypeError as e:
+            print("Error encoding data to JSON: '{}'".format(e))
+            raise
+        yield from super().publish(data)

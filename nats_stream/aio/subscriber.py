@@ -1,4 +1,5 @@
 import asyncio
+import json
 import time
 
 from nats.aio import client as NATS
@@ -14,7 +15,6 @@ class Subscriber:
     TIME_DELTA_START = 2
     SEQUENCE_START = 3
     FIRST = 4
-
 
     def __init__(self,
                  sc,
@@ -77,3 +77,16 @@ class Subscriber:
     @asyncio.coroutine
     def unsubscribe(self):
         yield from self.sc.unsubscribe(self)
+
+
+class JSONSubscriber(Subscriber):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.original_message_cb = self.message_cb
+        self.message_cb = self._parse_json
+
+    @asyncio.coroutine
+    def _parse_json(self, msg):
+        msg.data = json.loads(msg.data.decode(encoding='UTF-8'))
+        yield from self.original_message_cb(msg)
