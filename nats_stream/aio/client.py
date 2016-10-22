@@ -134,7 +134,8 @@ class StreamClient:
         """
         Shut's down the Stream Client and possibly the NATS Client.
         """
-        if not self.nc.is_connected:
+        if not self.nc.is_connected or self.nc.is_closed:
+            print("NC is already closed!")
             return
 
         yield from self.nc.unsubscribe(self.ack_subscription)
@@ -148,6 +149,7 @@ class StreamClient:
             if "unknown clientID" not in close_resp.error:
                 raise NATS.NatsError(close_resp.error)
         elif self.nc_owned:
+            yield from self.nc.flush()
             yield from self.nc.close()
 
     @asyncio.coroutine
@@ -181,8 +183,8 @@ class StreamClient:
             if pub_ack.error:
                 raise NATS.NatsError(pub_ack.error)
             if ack.handler and callable(ack.handler):
-                if asyncio.iscoroutine(ack.handler):
-                    yield from ack.hanlder(pub_ack.guid)
+                if asyncio.iscoroutinefunction(ack.handler):
+                    yield from ack.handler(pub_ack.guid)
                 else:
                     ack.handler(pub_ack.guid)
 
@@ -224,7 +226,7 @@ class StreamClient:
 
         if sub.start_at:
             stan_sub.startTimeDelta = sub.start_at
-        else:
+        elif sub.start_sequence:
             stan_sub.startSequence = sub.start_sequence
 
         # TODO: Timeout?
