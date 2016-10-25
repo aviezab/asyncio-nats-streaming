@@ -51,7 +51,7 @@ class StreamClient:
         self.nc_owned = True
 
         self.client_id = ''
-        self.server_id = ''
+        self.cluster_id = ''
         self.pub_prefix = ''
 
         self.sub_requests = ''
@@ -69,7 +69,7 @@ class StreamClient:
 
     @asyncio.coroutine
     def connect(self,
-                server_id,
+                cluster_id,
                 client_id,
                 nc=None,
                 connect_timeout=DEFAULT_CONNECT_WAIT,
@@ -87,7 +87,7 @@ class StreamClient:
                 verbose=verbose,
                 **options
             )
-        self.server_id = server_id
+        self.cluster_id = cluster_id
         self.client_id = client_id
         yield from self._sub_to_heartbeat()
         yield from self._send_connection_request()
@@ -100,7 +100,7 @@ class StreamClient:
         connect_req.clientID = self.client_id
         connect_req.heartbeatInbox = self.heart_beat_inbox
 
-        discover_subject = DEFAULT_DISCOVER_PREFIX + "." + self.server_id
+        discover_subject = DEFAULT_DISCOVER_PREFIX + "." + self.cluster_id
         # TODO: Add Timeout
         reply = yield from self.nc.timed_request(discover_subject,
                                                  connect_req.SerializeToString())
