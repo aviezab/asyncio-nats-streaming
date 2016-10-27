@@ -14,5 +14,5 @@ Install the client with `pip install asyncio-nats-streaming-client`
 - [] Better error handling from NATS protocol
 - [] Custom timeouts for pub/sub
 - [] Refactor for cleanliness
-- [] Create JSON Publisher/Subscriber for quick serialization/deserialization of JSON data.
-- [] Switch to logger instead of printing
+- [x] Create JSON Publisher/Subscriber for quick serialization/deserialization of JSON data.
+- [-] Switch to logger instead of printing - Removed printing and logging all together for now. Up for debate. 
