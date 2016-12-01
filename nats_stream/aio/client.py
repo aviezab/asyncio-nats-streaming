@@ -90,11 +90,11 @@ class StreamClient:
         self.cluster_id = cluster_id
         self.client_id = client_id
         yield from self._sub_to_heartbeat()
-        yield from self._send_connection_request()
+        yield from self._send_connection_request(connect_timeout)
         yield from self._sub_to_acks()
 
     @asyncio.coroutine
-    def _send_connection_request(self):
+    def _send_connection_request(self, connect_timeout):
         # Create connect request for streaming service
         connect_req = pb.ConnectRequest()
         connect_req.clientID = self.client_id
@@ -103,7 +103,8 @@ class StreamClient:
         discover_subject = DEFAULT_DISCOVER_PREFIX + "." + self.cluster_id
         # TODO: Add Timeout
         reply = yield from self.nc.timed_request(discover_subject,
-                                                 connect_req.SerializeToString())
+                                                 connect_req.SerializeToString(),
+                                                 connect_timeout)
 
         connect_response = pb.ConnectResponse()
         connect_response.ParseFromString(reply.data)
