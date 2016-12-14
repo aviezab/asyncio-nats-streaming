@@ -257,7 +257,8 @@ class StreamClient:
         unsub_req.inbox = sub.inbox
         unsub_req.durableName = sub.durable_name
 
-        reply = yield from self.nc.request(self.unsub_requests, unsub_req.SerializeToString())
+        # TODO: Timeout
+        reply = yield from self.nc.timed_request(self.unsub_requests, unsub_req.SerializeToString())
         unsub_resp = pb.SubscriptionResponse()
         unsub_resp.ParseFromString(reply.data)
         if unsub_resp.error:
