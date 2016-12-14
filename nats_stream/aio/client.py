@@ -56,6 +56,7 @@ class StreamClient:
 
         self.sub_requests = ''
         self.unsub_requests = ''
+        self.sub_close_requests = ''
         self.close_requests = ''
 
         self.sub_map = {}
@@ -254,6 +255,7 @@ class StreamClient:
         unsub_req.clientID = self.client_id
         unsub_req.subject = sub.subject
         unsub_req.inbox = sub.inbox
+        unsub_req.durableName = sub.durable_name
 
         reply = yield from self.nc.request(self.unsub_requests, unsub_req.SerializeToString())
         unsub_resp = pb.SubscriptionResponse()
