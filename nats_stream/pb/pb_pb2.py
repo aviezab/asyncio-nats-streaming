@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='pb.proto',
   package='pb',
   syntax='proto3',
-  serialized_pb=_b('\n\x08pb.proto\x12\x02pb\"f\n\x06PubMsg\x12\x10\n\x08\x63lientID\x18\x01 \x01(\t\x12\x0c\n\x04guid\x18\x02 \x01(\t\x12\x0f\n\x07subject\x18\x03 \x01(\t\x12\r\n\x05reply\x18\x04 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x05 \x01(\x0c\x12\x0e\n\x06sha256\x18\n \x01(\x0c\"%\n\x06PubAck\x12\x0c\n\x04guid\x18\x01 \x01(\t\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"\x81\x01\n\x08MsgProto\x12\x10\n\x08sequence\x18\x01 \x01(\x04\x12\x0f\n\x07subject\x18\x02 \x01(\t\x12\r\n\x05reply\x18\x03 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x04 \x01(\x0c\x12\x11\n\ttimestamp\x18\x05 \x01(\x03\x12\x13\n\x0bredelivered\x18\x06 \x01(\x08\x12\r\n\x05\x43RC32\x18\n \x01(\r\"(\n\x03\x41\x63k\x12\x0f\n\x07subject\x18\x01 \x01(\t\x12\x10\n\x08sequence\x18\x02 \x01(\x04\":\n\x0e\x43onnectRequest\x12\x10\n\x08\x63lientID\x18\x01 \x01(\t\x12\x16\n\x0eheartbeatInbox\x18\x02 \x01(\t\"\x89\x01\n\x0f\x43onnectResponse\x12\x11\n\tpubPrefix\x18\x01 \x01(\t\x12\x13\n\x0bsubRequests\x18\x02 \x01(\t\x12\x15\n\runsubRequests\x18\x03 \x01(\t\x12\x15\n\rcloseRequests\x18\x04 \x01(\t\x12\r\n\x05\x65rror\x18\x05 \x01(\t\x12\x11\n\tpublicKey\x18\x64 \x01(\t\"\xf1\x01\n\x13SubscriptionRequest\x12\x10\n\x08\x63lientID\x18\x01 \x01(\t\x12\x0f\n\x07subject\x18\x02 \x01(\t\x12\x0e\n\x06qGroup\x18\x03 \x01(\t\x12\r\n\x05inbox\x18\x04 \x01(\t\x12\x13\n\x0bmaxInFlight\x18\x05 \x01(\x05\x12\x15\n\rackWaitInSecs\x18\x06 \x01(\x05\x12\x13\n\x0b\x64urableName\x18\x07 \x01(\t\x12(\n\rstartPosition\x18\n \x01(\x0e\x32\x11.pb.StartPosition\x12\x15\n\rstartSequence\x18\x0b \x01(\x04\x12\x16\n\x0estartTimeDelta\x18\x0c \x01(\x03\"7\n\x14SubscriptionResponse\x12\x10\n\x08\x61\x63kInbox\x18\x02 \x01(\t\x12\r\n\x05\x65rror\x18\x03 \x01(\t\"[\n\x12UnsubscribeRequest\x12\x10\n\x08\x63lientID\x18\x01 \x01(\t\x12\x0f\n\x07subject\x18\x02 \x01(\t\x12\r\n\x05inbox\x18\x03 \x01(\t\x12\x13\n\x0b\x64urableName\x18\x04 \x01(\t\" \n\x0c\x43loseRequest\x12\x10\n\x08\x63lientID\x18\x01 \x01(\t\"\x1e\n\rCloseResponse\x12\r\n\x05\x65rror\x18\x01 \x01(\t*`\n\rStartPosition\x12\x0b\n\x07NewOnly\x10\x00\x12\x10\n\x0cLastReceived\x10\x01\x12\x12\n\x0eTimeDeltaStart\x10\x02\x12\x11\n\rSequenceStart\x10\x03\x12\t\n\x05\x46irst\x10\x04\x62\x06proto3')
+  serialized_pb=_b('\n\x08pb.proto\x12\x02pb\"f\n\x06PubMsg\x12\x10\n\x08\x63lientID\x18\x01 \x01(\t\x12\x0c\n\x04guid\x18\x02 \x01(\t\x12\x0f\n\x07subject\x18\x03 \x01(\t\x12\r\n\x05reply\x18\x04 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x05 \x01(\x0c\x12\x0e\n\x06sha256\x18\n \x01(\x0c\"%\n\x06PubAck\x12\x0c\n\x04guid\x18\x01 \x01(\t\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"\x81\x01\n\x08MsgProto\x12\x10\n\x08sequence\x18\x01 \x01(\x04\x12\x0f\n\x07subject\x18\x02 \x01(\t\x12\r\n\x05reply\x18\x03 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x04 \x01(\x0c\x12\x11\n\ttimestamp\x18\x05 \x01(\x03\x12\x13\n\x0bredelivered\x18\x06 \x01(\x08\x12\r\n\x05\x43RC32\x18\n \x01(\r\"(\n\x03\x41\x63k\x12\x0f\n\x07subject\x18\x01 \x01(\t\x12\x10\n\x08sequence\x18\x02 \x01(\x04\":\n\x0e\x43onnectRequest\x12\x10\n\x08\x63lientID\x18\x01 \x01(\t\x12\x16\n\x0eheartbeatInbox\x18\x02 \x01(\t\"\xa3\x01\n\x0f\x43onnectResponse\x12\x11\n\tpubPrefix\x18\x01 \x01(\t\x12\x13\n\x0bsubRequests\x18\x02 \x01(\t\x12\x15\n\runsubRequests\x18\x03 \x01(\t\x12\x15\n\rcloseRequests\x18\x04 \x01(\t\x12\r\n\x05\x65rror\x18\x05 \x01(\t\x12\x18\n\x10subCloseRequests\x18\x06 \x01(\t\x12\x11\n\tpublicKey\x18\x64 \x01(\t\"\xf1\x01\n\x13SubscriptionRequest\x12\x10\n\x08\x63lientID\x18\x01 \x01(\t\x12\x0f\n\x07subject\x18\x02 \x01(\t\x12\x0e\n\x06qGroup\x18\x03 \x01(\t\x12\r\n\x05inbox\x18\x04 \x01(\t\x12\x13\n\x0bmaxInFlight\x18\x05 \x01(\x05\x12\x15\n\rackWaitInSecs\x18\x06 \x01(\x05\x12\x13\n\x0b\x64urableName\x18\x07 \x01(\t\x12(\n\rstartPosition\x18\n \x01(\x0e\x32\x11.pb.StartPosition\x12\x15\n\rstartSequence\x18\x0b \x01(\x04\x12\x16\n\x0estartTimeDelta\x18\x0c \x01(\x03\"7\n\x14SubscriptionResponse\x12\x10\n\x08\x61\x63kInbox\x18\x02 \x01(\t\x12\r\n\x05\x65rror\x18\x03 \x01(\t\"[\n\x12UnsubscribeRequest\x12\x10\n\x08\x63lientID\x18\x01 \x01(\t\x12\x0f\n\x07subject\x18\x02 \x01(\t\x12\r\n\x05inbox\x18\x03 \x01(\t\x12\x13\n\x0b\x64urableName\x18\x04 \x01(\t\" \n\x0c\x43loseRequest\x12\x10\n\x08\x63lientID\x18\x01 \x01(\t\"\x1e\n\rCloseResponse\x12\r\n\x05\x65rror\x18\x01 \x01(\t*`\n\rStartPosition\x12\x0b\n\x07NewOnly\x10\x00\x12\x10\n\x0cLastReceived\x10\x01\x12\x12\n\x0eTimeDeltaStart\x10\x02\x12\x11\n\rSequenceStart\x10\x03\x12\t\n\x05\x46irst\x10\x04\x62\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -53,8 +53,8 @@ _STARTPOSITION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=993,
-  serialized_end=1089,
+  serialized_start=1019,
+  serialized_end=1115,
 )
 _sym_db.RegisterEnumDescriptor(_STARTPOSITION)
 
@@ -363,7 +363,14 @@ _CONNECTRESPONSE = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='publicKey', full_name='pb.ConnectResponse.publicKey', index=5,
+      name='subCloseRequests', full_name='pb.ConnectResponse.subCloseRequests', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='publicKey', full_name='pb.ConnectResponse.publicKey', index=6,
       number=100, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -382,7 +389,7 @@ _CONNECTRESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=394,
-  serialized_end=531,
+  serialized_end=557,
 )
 
 
@@ -475,8 +482,8 @@ _SUBSCRIPTIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=534,
-  serialized_end=775,
+  serialized_start=560,
+  serialized_end=801,
 )
 
 
@@ -513,8 +520,8 @@ _SUBSCRIPTIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=777,
-  serialized_end=832,
+  serialized_start=803,
+  serialized_end=858,
 )
 
 
@@ -565,8 +572,8 @@ _UNSUBSCRIBEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=834,
-  serialized_end=925,
+  serialized_start=860,
+  serialized_end=951,
 )
 
 
@@ -596,8 +603,8 @@ _CLOSEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=927,
-  serialized_end=959,
+  serialized_start=953,
+  serialized_end=985,
 )
 
 
@@ -627,8 +634,8 @@ _CLOSERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=961,
-  serialized_end=991,
+  serialized_start=987,
+  serialized_end=1017,
 )
 
 _SUBSCRIPTIONREQUEST.fields_by_name['startPosition'].enum_type = _STARTPOSITION

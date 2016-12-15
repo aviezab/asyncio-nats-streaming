@@ -75,7 +75,18 @@ class Subscriber:
         yield from self.sc.subscribe(self)
 
     @asyncio.coroutine
+    def close(self):
+        """
+        To be used if you plan on restarting the subscriber and continuing where you left off.
+        """
+        yield from self.sc.unsubscribe(self, close=True)
+
+    @asyncio.coroutine
     def unsubscribe(self):
+        """
+        To be used if you do not plan on restarting the subscriber and continuing where you left off.
+        :return:
+        """
         yield from self.sc.unsubscribe(self)
 
 

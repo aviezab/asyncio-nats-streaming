@@ -247,20 +247,24 @@ class StreamClient:
         sub.ack_inbox = sub_resp.ackInbox
 
     @asyncio.coroutine
-    def unsubscribe(self, sub):
+    def unsubscribe(self, sub, close=False):
         yield from self.nc.unsubscribe(sub.inbox_sub)
         del self.sub_map[sub.inbox]
 
         unsub_req = pb.UnsubscribeRequest()
         unsub_req.clientID = self.client_id
         unsub_req.subject = sub.subject
-        unsub_req.inbox = sub.inbox
-        unsub_req.durableName = sub.durable_name
+        unsub_req.inbox = sub.ack_inbox
+        if sub.durable_name:
+            unsub_req.durableName = sub.durable_name
+
+        req_subject = self.unsub_requests if not close else self.close_requests
 
         # TODO: Timeout
-        reply = yield from self.nc.timed_request(self.unsub_requests, unsub_req.SerializeToString())
+        reply = yield from self.nc.timed_request(req_subject, unsub_req.SerializeToString())
         unsub_resp = pb.SubscriptionResponse()
         unsub_resp.ParseFromString(reply.data)
         if unsub_resp.error:
             raise NATS.NatsError(
-                "Error unsubscribbing  from {subject}: '{err}'".format(subject=sub.subject, err=reply.error))
+                "Error unsubscribing from {subject}: '{err}'".format(subject=sub.subject, err=unsub_resp.error)
+            )
