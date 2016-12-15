@@ -1,6 +1,8 @@
 import asyncio
 import signal
 
+import time
+
 from nats_stream.aio.client import StreamClient, Msg
 from nats_stream.aio.subscriber import JSONSubscriber
 
@@ -26,6 +28,8 @@ async def run(loop):
         if sc.nc.is_closed:
             return
         print("Disconnecting...")
+        loop.create_task(sub.unsubscribe())
+        time.sleep(2)
         loop.create_task(sc.close())
 
     for sig in ("SIGINT", "SIGTERM"):

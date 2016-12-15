@@ -26,6 +26,7 @@ async def run(loop):
         print("Disconnecting...")
         if sc.nc.is_closed:
             return
+        loop.create_task(sub.unsubscribe())
         time.sleep(2)
         loop.create_task(sc.close())
 
