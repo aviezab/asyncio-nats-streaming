@@ -1,18 +1,16 @@
 # Asyncio Nats Streaming
-### Disclaimer! This project is currently in alpha!
+
+### Disclaimer! This project is currently in beta!
+I am using this in production at my work but I can deal with my own bugs. You may not feel the same. :) 
 
 ### Description
-A client implementation of NATS Streaming Protocol utilizing Asyncio for fast asyncronoush pub/sub.
+A client implementation of NATS Streaming Protocol utilizing asyncio for fast asynchronous pub/sub.
 
 ### Install
 Install the client with `pip install asyncio-nats-streaming-client`
 
 #### TODO:
 
-- [] Write some tests
-- [] Write better README
+- [] Write some tests -- Could use some help from the community.
 - [] Better error handling from NATS protocol
-- [] Custom timeouts for pub/sub
-- [] Refactor for cleanliness
-- [x] Create JSON Publisher/Subscriber for quick serialization/deserialization of JSON data.
-- [-] Switch to logger instead of printing - Removed printing and logging all together for now. Up for debate. 
+- [] Custom timeouts for pub/sub -- easy level
