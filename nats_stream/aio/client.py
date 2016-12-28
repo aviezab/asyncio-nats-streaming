@@ -40,6 +40,13 @@ class Msg:
         self.redelivered = proto_msg.redelivered
         self.crc = proto_msg.CRC32
 
+    @asyncio.coroutine
+    def ack(self, sc):
+        ack = pb.Ack()
+        ack.subject = self.subject
+        ack.sequence = self.sequence
+        yield from sc.nc.publish(self.sub.ack_inbox, ack.SerializeToString())
+
 
 class StreamClient:
     def __init__(self):
@@ -203,11 +210,7 @@ class StreamClient:
             yield from msg.sub.message_cb(msg)
 
         if self.nc.is_connected and not msg.sub.manual_acks:
-            ack_subject = msg.sub.ack_inbox
-            ack = pb.Ack()
-            ack.subject = msg.subject
-            ack.sequence = msg.sequence
-            yield from self.nc.publish(ack_subject, ack.SerializeToString())
+            yield from msg.ack(self)
 
     @asyncio.coroutine
     def subscribe(self, sub):
