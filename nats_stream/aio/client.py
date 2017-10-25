@@ -50,10 +50,7 @@ class Msg:
 
 class StreamClient:
     def __init__(self):
-
-        self.nc = None
         self.io_loop = None
-
         self.nc = NATS.Client()
         self.nc_owned = True
 
@@ -89,6 +86,7 @@ class StreamClient:
         """
         if nc:
             self.nc_owned = False
+            self.nc = nc
         if not self.nc.is_connected:
             yield from self.nc.connect(
                 io_loop=io_loop,
