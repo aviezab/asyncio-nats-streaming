@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from nats.aio import client as NATS
 from nats.aio.utils import new_inbox
@@ -13,6 +14,8 @@ DEFAULT_CONNECT_WAIT = 2
 # Sub options
 DEFAULT_ACK_WAIT = 30  # seconds
 DEFAULT_MAX_INFLIGHT = 1024
+
+LOG = logging.getLogger(__name__)
 
 
 class Ack:
@@ -142,7 +145,7 @@ class StreamClient:
         Shut's down the Stream Client and possibly the NATS Client.
         """
         if not self.nc.is_connected or self.nc.is_closed:
-            print("NC is already closed!")
+            LOG.warning("NC is already closed!")
             return
 
         yield from self.nc.unsubscribe(self.ack_subscription)
