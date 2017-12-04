@@ -1,5 +1,9 @@
 import asyncio
 import json
+import logging
+
+
+LOG = logging.getLogger(__name__)
 
 
 class Publisher:
@@ -32,6 +36,7 @@ class JSONPublisher(Publisher):
         try:
             data = bytes(json.dumps(data), encoding='UTF-8')
         except TypeError as e:
-            print("Error encoding data to JSON: '{}'".format(e))
+            LOG.error("Error encoding data to JSON: '{}'".format(e))
             raise
+
         yield from super().publish(data)
